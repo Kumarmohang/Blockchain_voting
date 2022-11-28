@@ -98,7 +98,6 @@ function batchTransferToken(
     (bool success,)= recipients[i].call{value: amounts[i]}("");
     require(success , "BatchTransfer failed");
     }
-    // Multi Token Transfer 
     for(uint i=0;i<tokenAddress.length;i++) {
     IERC20 requestedToken = IERC20(tokenAddress[i]);
     (bool success,) = address(requestedToken).call(abi.encodeWithSignature("transferFrom(address,address,uint256)", msg.sender, tokenRecipients[i], tokenAmounts[i]));
