@@ -5,14 +5,9 @@ async function main() {
     "BatchTransferContract"
   );
   const batchTransferContract = await BatchTransferContract.deploy();
-
   await batchTransferContract.deployed();
-
-  console.log(`BatchTransafer address ${batchTransferContract.address}   `);
+  console.log(`BatchTransafer address ${batchTransferContract.address}`);
 }
-
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
