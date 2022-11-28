@@ -1,0 +1,133 @@
+### Batch Transfer Token
+
+The function `batchTransferToken` transfers a specific type of ERC20 token from a single address to multiple addresses.
+
+# BatchTransferContract.sol
+
+## Methods
+
+---
+
+### Batch Transfer
+
+The function `batchTransfer` transfers ethers from a single address to multiple addresses.
+
+### Batch Transfer Multi Token
+
+The function `batchTransferMultiTokens` transfers multiple ERC20 tokens to multiple addresses.
+
+### Batch Transfer Token
+
+The function `batchTransferToken` transfers single tokens (ERC20) to multiple addresses.
+
+### Batch Transfer Combined Multi Tokens
+
+The function `batchTransferCombinedMultiTokens` transfers multiple ERC20 tokens and ethers to multiple addresses.
+
+### Other functions
+
+Other functions imported are as per the ERC20 standards (https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol)
+
+## Requirements to run this repository
+
+---
+
+You can compile, run tests and deploy this smart contract with Hardhat.
+
+- [Node.js](https://nodejs.org/download/release/latest-v10.x/): `>=16.7.0`
+
+- [Hardhat](https://docs.openzeppelin.com/upgrades-plugins/1.x/hardhat-upgrades): `v2.12.2`
+
+## Usage
+
+---
+
+Clone or download this repository.
+
+Go to path and run on terminal:
+
+```sh
+
+npm install
+
+```
+
+After running, all the dependencies will be downloaded.
+
+You can also install hardhat as a global dependency by running:
+
+```sh
+
+npm install --save-dev hardhat
+
+```
+
+### Compile contracts
+
+---
+
+```sh
+
+npx hardhat compile
+
+```
+
+After running, contract information including ABI will be available in the `artifacts/` directory.
+
+### Run tests on Hardhat
+
+---
+
+You can run tests which can be found in the test directory `BatchContractHardhat/test` by running on the terminal:
+
+```sh
+
+npx hardhat test
+
+```
+
+// Note:
+// Kindly copy/move the ‘Token.sol’ file from the ‘Token’ folder to the ‘contracts’ folder while testing .
+
+// Reason: For testing, it is required in the above folder.
+
+### Run migration and deploy contracts
+
+---
+
+Create .env file:
+
+```
+
+cp .env.template .env
+
+```
+
+// Edit the below contents in .env file:
+
+Goerli=https://goerli.infura.io/v3/`Infura key`
+
+PRIVATE_KEY=`Wallet Private Key`
+
+API_key= `EtherScan API key`
+
+```
+
+
+```
+
+Run deploy command:
+
+```sh
+
+npx hardhat run scripts/deploy.ts --network <network_name> // mainnet, rinkeby, goerli...
+
+```
+
+## Licence
+
+---
+
+// SPDX-License-Identifier: MIT
+
+###
