@@ -72,11 +72,11 @@ cp .env.template .env
 
 Edit the below contents in .env file:
 
-mainnet=https://mainnet.infura.io/v3/`Infura key`
+mainnet=`https://mainnet.infura.io/v3/Infura_key`
 
 PRIVATE_KEY=`Wallet Private Key`
 
-API_key= `EtherScan API key`
+API_KEY= `EtherScan API key`
 
 ### Compile contracts
 
