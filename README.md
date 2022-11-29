@@ -1,8 +1,8 @@
-### Batch Transfer Token
+# Batch Transfer Contract
 
-The function `batchTransferToken` transfers a specific type of ERC20 token from a single address to multiple addresses.
+This smart contract is used to enable batch payments (Multiple recipients) in a single blockchain transaction. The tokens gets splitted and transferred to the respective recipients without involving a mediator.
 
-# BatchTransferContract.sol
+The smart contract can be used to process payment transactions in a P2P way (Non Custodial) and a Payer can transfer to multiple Payees at once.
 
 ## Methods
 
@@ -10,19 +10,19 @@ The function `batchTransferToken` transfers a specific type of ERC20 token from 
 
 ### Batch Transfer
 
-The function `batchTransfer` transfers ethers from a single address to multiple addresses.
-
-### Batch Transfer Multi Token
-
-The function `batchTransferMultiTokens` transfers multiple ERC20 tokens to multiple addresses.
+The function `batchTransfer` transfers the native coins (such as ETH, Matic etc) from a single address to multiple destination addresses.
 
 ### Batch Transfer Token
 
-The function `batchTransferToken` transfers single tokens (ERC20) to multiple addresses.
+The function `batchTransferToken` can be used for making a batch transaction involving single ERC20 token.
+
+### Batch Transfer Multi Token
+
+The function `batchTransferMultiTokens` can be used for making batch transaction involving multiple ERC20 tokens.
 
 ### Batch Transfer Combined Multi Tokens
 
-The function `batchTransferCombinedMultiTokens` transfers multiple ERC20 tokens and ethers to multiple addresses.
+The function `batchTransferCombinedMultiTokens` can be used for a batch trasaction involving a combination of multiple ERC20 tokens and native coin (eg: ETH).
 
 ## Requirements to run this repository
 
