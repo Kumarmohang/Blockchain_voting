@@ -1,6 +1,6 @@
 # Batch Transfer Contract
 
-This smart contract is used to enable batch payments (Multiple recipients) in a single blockchain transaction. The tokens gets splitted and transferred to the respective recipients without involving a mediator.
+This smart contract is used to enable batch payments (Multiple recipients) in a single blockchain transaction. The tokens gets split and transferred to the respective recipients without involving a mediator.
 
 The smart contract can be used to process payment transactions in a P2P way (Non Custodial) and a Payer can transfer to multiple Payees at once.
 
