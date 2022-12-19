@@ -4,9 +4,9 @@ This smart contract is used to enable batch payments (Multiple recipients) in a 
 
 The smart contract can be used to process payment transactions in a P2P way (Non Custodial) and a Payer can transfer to multiple Payees at once.
 
-## Methods
+In order to save gas usage, the smart contract does not enforce additional checks such as sufficient balance check of tokens, sufficient check etc that anyways are part of the token transaction(ERC20 token) and the same can be checked in the application itself before executing the blockchain transaction (using the read only methods such as balanceOf etc which does not involves any gas usage). In case the required conditions are not met, the target smart contract (token contract) will revert the transaction automatically with a failure message.
 
----
+## Methods
 
 ### Batch Transfer
 
@@ -22,11 +22,9 @@ The function `batchTransferMultiTokens` can be used for making batch transaction
 
 ### Batch Transfer Combined Multi Tokens
 
-The function `batchTransferCombinedMultiTokens` can be used for a batch trasaction involving a combination of multiple ERC20 tokens and native coin (eg: ETH).
+The function `batchTransferCombinedMultiTokens` can be used for a batch transaction involving a combination of multiple ERC20 tokens and native coin (eg: ETH).
 
 ## Requirements to run this repository
-
----
 
 You can compile, run tests and deploy this smart contract with Hardhat.
 
@@ -35,8 +33,6 @@ You can compile, run tests and deploy this smart contract with Hardhat.
 - [Hardhat](https://docs.openzeppelin.com/upgrades-plugins/1.x/hardhat-upgrades): `v2.12.2`
 
 ## Usage
-
----
 
 Clone or download this repository.
 
@@ -58,7 +54,7 @@ npm install --save-dev hardhat
 
 ```
 
-### Pre-requsites
+### Pre-requisites
 
 ---
 
@@ -119,9 +115,7 @@ npx hardhat run scripts/deploy.ts --network <network_name> // mainnet, rinkeby, 
 
 ```
 
-## Licence
-
----
+## License
 
 SPDX-License-Identifier: MIT
 
