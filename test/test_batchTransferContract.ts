@@ -772,6 +772,25 @@ describe("Batch contract", () => {
       expect(balanceuserAfter2).to.equals(balanceuser2 + 1000);
       expect(ethebalanceAfter1).to.equals(ethebalance1.add(20));
       expect(ethebalanceAfter2).to.equals(ethebalance2.add(30));
+      console.log("Ether hexa converter", ethers.BigNumber.from("0x2a"));
+      console.log(
+        "Ether hexa converter 2nd value     === ",
+        ethers.utils.defaultAbiCoder
+          .decode(
+            ["address"],
+            "0x000000000000000000000000f05f8bc8a0d5fe5d2eb2fb1d0f900b20e71dd966"
+          )[0]
+          .toString()
+      );
+      console.log(
+        "Ether hexa converter 3nd value     === ",
+        ethers.utils.defaultAbiCoder
+          .decode(
+            ["uint256", "string"],
+            "0x0000000000000000000000000000000000000000000000056bc75e2d63100000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000195472616e73666572205769746820486f6c6420746f6b656e7300000000000000"
+          )
+          .toString()
+      );
     });
   });
 });
