@@ -14,7 +14,11 @@ The function `batchTransfer` transfers the native coins (such as ETH, Matic etc)
 
 ### Batch Transfer Token
 
-The function `batchTransferToken` can be used for making a batch transaction involving single ERC20 token.
+The function `batchTransferToken` can be used for making a batch transaction involving single ERC20 token. In order to save gas, the function first adds the total required tokens, gets the same to the contract address using a one time `transferFrom` call and then splits (using `transfer` method) the respective tokens to the required number of recipients. This method is not intended to be used for deflationary tokens as the number of tokens transferred and received by the recipient can be different and the one time step of `transferFrom` method of the token to the contract and then splitting the same to multiple recipients will not work. For deflationary tokens, the other method `simpleBatchTransferToken` can be used.
+
+### Simple Batch Transfer Token
+
+The function `simpleBatchTransferToken` can be used for making a simple batch transaction involving single ERC20 token. The method directly uses `transferFrom` method of the target token contract for each recipient. This method also supports deflationary tokens as the one time step of using `transferFrom` to the contract itself is not there as in case of deflationary tokens the transferred amount may not be equal to the received amount.
 
 ### Batch Transfer Multi Token
 
