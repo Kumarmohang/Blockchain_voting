@@ -6,6 +6,8 @@ The smart contract can be used to process payment transactions in a P2P way (Non
 
 In order to save gas usage, the smart contract does not enforce additional checks such as sufficient balance check of tokens, sufficient check etc that anyways are part of the token transaction(ERC20 token) and the same can be checked in the application itself before executing the blockchain transaction (using the read only methods such as balanceOf etc which does not involves any gas usage). In case the required conditions are not met, the target smart contract (token contract) will revert the transaction automatically with a failure message.
 
+<img src="images/BatchTransferToken.png" alt="Alt text" title="Optional title" width="800">
+
 ## Methods
 
 ### Batch Transfer
