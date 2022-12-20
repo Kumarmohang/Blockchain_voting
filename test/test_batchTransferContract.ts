@@ -203,6 +203,149 @@ describe("Batch contract", () => {
     });
   });
 
+  describe("simpleBatchTransferToken", () => {
+    it("should be reverted if the recipient contract array length is less than amount array length", async () => {
+      const transaction = batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        [userOne, userTwo, userOne],
+        ["100", "200", "10", "1000"]
+      );
+      await expect(transaction).to.be.revertedWith(
+        "The input arrays must have the same length"
+      );
+    });
+    it("should be reverted if the recipient contract array length is greater than amount array length", async () => {
+      const transaction = batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        [userOne, userTwo, userOne],
+        ["100", "200"]
+      );
+      await expect(transaction).to.be.revertedWith(
+        "The input arrays must have the same length"
+      );
+    });
+    it("should be reverted if the recipient address is not passed", async () => {
+      const transaction = batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        [],
+        ["10"]
+      );
+      await expect(transaction).to.be.revertedWith(
+        "The input arrays must have the same length"
+      );
+    });
+    it("should be reverted if the amount parameter is not passed", async () => {
+      const transaction = batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        [userOne, userTwo, userOne],
+        []
+      );
+      await expect(transaction).to.be.revertedWith(
+        "The input arrays must have the same length"
+      );
+    });
+    it("should be reverted if the amount parameter is not passed", async () => {
+      const transaction = batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        [userOne, userTwo],
+        []
+      );
+      await expect(transaction).to.be.revertedWith(
+        "The input arrays must have the same length"
+      );
+    });
+    it("should be reverted if the batch contract does not have the allowance to pay", async () => {
+      const transaction = batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        [userOne, userTwo],
+        ["100", "200"]
+      );
+      expect(transaction).to.be.revertedWith("BatchTransfer Token failed");
+    });
+    it("should be reverted if the user does not have the funds to transfer", async () => {
+      await ERC20contract.connect(signers[2]).approve(Batchaddress, "100000");
+      const transaction = batchcontract
+        .connect(signers[2])
+        .simpleBatchTransferToken(
+          Tokenaddress1,
+          [userOne, userTwo],
+          ["100", "200"]
+        );
+      await expect(transaction).to.revertedWith("BatchTransfer Token failed");
+    });
+    it("should be reverted if the approval is from different contract but is being called from another contract", async () => {
+      await ERC20contract.connect(signers[2]).approve(Batchaddress, "10000");
+      const transaction = batchcontract
+        .connect(signers[2])
+        .simpleBatchTransferToken(
+          ERC20contract2.address,
+          [userOne, userTwo],
+          ["100", "200"]
+        );
+      await expect(transaction).to.be.revertedWith(
+        "BatchTransfer Token failed"
+      );
+    });
+    it("should be reverted if the approved balance is less than the total amount", async () => {
+      await ERC20contract.approve(Batchaddress, "200");
+      const transaction = batchcontract.simpleBatchTransferToken(
+        ERC20contract2.address,
+        [userOne, userTwo],
+        ["1000", "200"]
+      );
+      await expect(transaction).to.be.revertedWith(
+        "BatchTransfer Token failed"
+      );
+    });
+    it("should be reverted if the recipient address is zero bytes", async () => {
+      await ERC20contract.approve(Batchaddress, "1000");
+      const transaction = batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        ["0x0000000000000000000000000000000000000000", userTwo],
+        ["500", "500"]
+      );
+      await expect(transaction).to.be.revertedWith(
+        "BatchTransfer Token failed"
+      );
+    });
+    it("should be reverted if every recipient's address is zero bytes", async () => {
+      await ERC20contract.approve(Batchaddress, "1000");
+      const transaction = batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        [
+          "0x0000000000000000000000000000000000000000",
+          "0x0000000000000000000000000000000000000000",
+        ],
+        ["500", "500"]
+      );
+      await expect(transaction).to.be.revertedWith(
+        "BatchTransfer Token failed"
+      );
+    });
+  });
+  describe("simpleBatchTransferToken function should complete", () => {
+    it("simpleBatchTransferToken should be completed successfully with event logs", async () => {
+      await ERC20contract.approve(Batchaddress, "2000");
+      const balanceuserOne = await ERC20contract.balanceOf(signers[7].address);
+      const balanceuserTwo = await ERC20contract.balanceOf(signers[8].address);
+      const transaction = await batchcontract.simpleBatchTransferToken(
+        Tokenaddress1,
+        [signers[7].address, signers[8].address],
+        ["500", "1500"]
+      );
+      const receive = await transaction.wait();
+      const args = receive.events;
+      const balanceuserOneAfter = await ERC20contract.balanceOf(
+        signers[7].address
+      );
+      const balanceuserTowAfter = await ERC20contract.balanceOf(
+        signers[8].address
+      );
+      expect(balanceuserOneAfter).to.equals(balanceuserOne.add(500));
+      expect(balanceuserTowAfter).to.equals(balanceuserTwo.add(1500));
+    });
+  });
+
   describe("batchTransferToken", () => {
     it("should be reverted if the recipient contract array length is less than amount array length", async () => {
       const transaction = batchcontract.batchTransferToken(
@@ -290,7 +433,7 @@ describe("Batch contract", () => {
         ["1000", "200"]
       );
       await expect(transaction).to.be.revertedWith(
-        "BatchTransfer Token failed"
+        "Error: insufficient allowance provided to the contract"
       );
     });
     it("should be reverted if the recipient address is zero bytes", async () => {
