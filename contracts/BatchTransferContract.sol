@@ -123,43 +123,36 @@ contract BatchTransferContract is ReentrancyGuard {
       "The input arrays must have the same length"
     );
     IERC20 requestedToken = IERC20(tokenAddress);
-    if (recipients.length <= 3) {
-      for (uint256 i = 0; i < recipients.length; i++) {
-        (bool status, ) = address(requestedToken).call(
-          abi.encodeWithSignature(
-            "transferFrom(address,address,uint256)",
-            msg.sender,
-            recipients[i],
-            amounts[i]
-          )
-        );
-        require(status, "BatchTransfer Token failed");
-      }
-    } else {
-      uint256 amount = 0;
-      for (uint256 i = 0; i < recipients.length; i++) {
-        amount += amounts[i];
-      }
-      (bool success, ) = address(requestedToken).call(
+    uint256 amount = 0;
+
+    for (uint256 i = 0; i < recipients.length; i++) {
+      amount += amounts[i];
+    }
+    uint allowance = IERC20(tokenAddress).allowance(msg.sender, address(this));
+    require(
+      allowance >= amount,
+      "Error: insufficient allowance provided to the contract"
+    );
+    (bool success, ) = address(requestedToken).call(
+      abi.encodeWithSignature(
+        "transferFrom(address,address,uint256)",
+        msg.sender,
+        address(this),
+        amount
+      )
+    );
+    require(success, "BatchTransfer Token failed");
+    for (uint256 i = 0; i < recipients.length; i++) {
+      (bool status, ) = address(requestedToken).call(
         abi.encodeWithSignature(
-          "transferFrom(address,address,uint256)",
-          msg.sender,
-          address(this),
-          amount
+          "transfer(address,uint256)",
+          recipients[i],
+          amounts[i]
         )
       );
-      require(success, "BatchTransfer Token failed");
-      for (uint256 i = 0; i < recipients.length; i++) {
-        (bool status, ) = address(requestedToken).call(
-          abi.encodeWithSignature(
-            "transfer(address,uint256)",
-            recipients[i],
-            amounts[i]
-          )
-        );
-        require(status, "BatchTransfer Token failed");
-      }
+      require(status, "BatchTransfer Token failed");
     }
+
     emit BatchTransferToken(msg.sender, tokenAddress, recipients, amounts);
   }
 
