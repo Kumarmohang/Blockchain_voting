@@ -64,10 +64,7 @@ contract BatchTransferContract is ReentrancyGuard {
     address[] calldata recipients,
     uint256[] calldata amounts
   ) external nonReentrant {
-    require(
-      recipients.length == amounts.length,
-      "The input arrays must have the same length"
-    );
+    require(recipients.length == amounts.length,"The input arrays must have the same length");
     IERC20 requestedToken = IERC20(tokenAddress);
     for (uint256 i = 0; i < recipients.length; i++) {
       (bool status, ) = address(requestedToken).call(
@@ -93,11 +90,7 @@ contract BatchTransferContract is ReentrancyGuard {
     address[] calldata recipients,
     uint256[] calldata amounts
   ) external nonReentrant {
-    require(
-      tokenAddress.length == recipients.length &&
-        tokenAddress.length == amounts.length,
-      "The input arrays must have the same length"
-    );
+    require(tokenAddress.length == recipients.length && tokenAddress.length == amounts.length, "The input arrays must have the same length");
     for (uint i = 0; i < tokenAddress.length; i++) {
       IERC20 requestedToken = IERC20(tokenAddress[i]);
       (bool success, ) = address(requestedToken).call(
@@ -118,10 +111,7 @@ contract BatchTransferContract is ReentrancyGuard {
     address[] calldata recipients,
     uint256[] calldata amounts
   ) external nonReentrant {
-    require(
-      recipients.length == amounts.length,
-      "The input arrays must have the same length"
-    );
+    require(recipients.length == amounts.length,"The input arrays must have the same length");
     IERC20 requestedToken = IERC20(tokenAddress);
     uint256 amount = 0;
 
@@ -133,26 +123,16 @@ contract BatchTransferContract is ReentrancyGuard {
       allowance >= amount,
       "Error: insufficient allowance provided to the contract"
     );
-    (bool success, ) = address(requestedToken).call(
-      abi.encodeWithSignature(
-        "transferFrom(address,address,uint256)",
-        msg.sender,
-        address(this),
-        amount
-      )
+    (bool success, ) = address(requestedToken).call(abi.encodeWithSignature(
+        "transferFrom(address,address,uint256)",msg.sender,address(this),amount)
     );
     require(success, "BatchTransfer Token failed");
     for (uint256 i = 0; i < recipients.length; i++) {
-      (bool status, ) = address(requestedToken).call(
-        abi.encodeWithSignature(
-          "transfer(address,uint256)",
-          recipients[i],
-          amounts[i]
-        )
+      (bool status, ) = address(requestedToken).call(abi.encodeWithSignature(
+          "transfer(address,uint256)",recipients[i],amounts[i])
       );
       require(status, "BatchTransfer Token failed");
     }
-
     emit BatchTransferToken(msg.sender, tokenAddress, recipients, amounts);
   }
 
@@ -164,9 +144,7 @@ contract BatchTransferContract is ReentrancyGuard {
     uint256[] calldata amounts
   ) external payable nonReentrant {
     require(
-      tokenAddress.length == tokenRecipients.length &&
-        tokenAddress.length == tokenAmounts.length &&
-        recipients.length == amounts.length,
+      tokenAddress.length == tokenRecipients.length && tokenAddress.length == tokenAmounts.length && recipients.length == amounts.length,
       "The input arrays must have the same length"
     );
     uint256 totalEthers = 0;
@@ -181,13 +159,8 @@ contract BatchTransferContract is ReentrancyGuard {
     }
     for (uint i = 0; i < tokenAddress.length; i++) {
       IERC20 requestedToken = IERC20(tokenAddress[i]);
-      (bool success, ) = address(requestedToken).call(
-        abi.encodeWithSignature(
-          "transferFrom(address,address,uint256)",
-          msg.sender,
-          tokenRecipients[i],
-          tokenAmounts[i]
-        )
+      (bool success, ) = address(requestedToken).call(abi.encodeWithSignature(
+        "transferFrom(address,address,uint256)",msg.sender,tokenRecipients[i],tokenAmounts[i])
       );
       require(success, "BatchTransfer Token failed");
     }
